@@ -66,7 +66,7 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     abstract public function getCategoria();// esto obliga a que las clases hijas tengan esto implementado porque tienen que devolver que a categoria pertenecen
-    // agregado Método común y método abstracto para Polimorfismo//
+    // agregado Método común y método abstracto para Polimorfismo
     public function obtenerDatosBasicos() {
         return "ID: " . $this->id . " | Fecha: " . $this->fechaCreacion . 
                " | Autor: " . $this->nombreAutor . " (Tel: " . $this->telefonoAutor . ")";
@@ -114,7 +114,7 @@ class AvisoLaboral extends Aviso {
     public function getCategoria() {
         return 'laboral';
     }
-   // -Polimorfismo en AvisoLaboral ---
+   // Polimorfismo en AvisoLaboral
     public function mostrarDetalle() {
         $texto = "[LABORAL] " . $this->obtenerDatosBasicos() . 
                  " | Empresa: " . $this->empresa . 
@@ -225,7 +225,7 @@ class AvisoInmobiliarioVenta extends AvisoInmobiliario {
     public function getCategoria() {
         return 'inmobiliario_venta';
     }
-    //  Polimorfismo en AvisoInmobiliarioVenta ---
+    //  Polimorfismo en AvisoInmobiliarioVenta
     public function mostrarDetalle() {
         $texto = "[INMOBILIARIO - VENTA] " . $this->obtenerDatosBasicos() . 
                  " | Dirección: " . $this->getDireccion() . 
@@ -269,7 +269,7 @@ class AvisoInmobiliarioAlquiler extends AvisoInmobiliario {
     public function getCategoria() {
         return 'inmobiliario_alquiler';
     }
-   // Polimorfismo en AvisoInmobiliarioAlquiler ---
+   // Polimorfismo en AvisoInmobiliarioAlquiler
     public function mostrarDetalle() {
         $texto = "[INMOBILIARIO - ALQUILER] " . $this->obtenerDatosBasicos() . 
                  " | Dirección: " . $this->getDireccion() . 
