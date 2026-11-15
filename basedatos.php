@@ -8,7 +8,7 @@ class BaseDatos {
     private $usuarioBD = "root";
     private $contrasenaBD = "";
 
-    // 1. CONECTAR A LA BASE DE DATOS
+    // CONECTAR A LA BASE DE DATOS
     public function conectar() {
         try {
             $conexion = new PDO("mysql:host=" . $this->servidor . ";dbname=" . $this->nombreBD, $this->usuarioBD, $this->contrasenaBD);
@@ -19,7 +19,7 @@ class BaseDatos {
         }
     }
 
-    // 2. VERIFICAR USUARIO Y CONTRASEÑA (SELECT)
+    // VERIFICAR USUARIO Y CONTRASEÑA (SELECT)
     public function validarUsuario($nombreUsuario, $contrasena, $rol) {
         $conexion = $this->conectar();
         try {
@@ -39,7 +39,7 @@ class BaseDatos {
         }
     }
 
-    // 3. CREAR PUBLICADOR USANDO la CLASE Usuario.php (INSERT)
+    // CREAR PUBLICADOR USANDO la CLASE Usuario.php (INSERT)
     public function crearPublicador($usuario) {
         $conexion = $this->conectar();
         try {
@@ -55,7 +55,7 @@ class BaseDatos {
         }
     }
 
-    // 4. BORRAR PUBLICADOR (DELETE)
+    // BORRAR PUBLICADOR (DELETE)
     public function borrarPublicador($nombrePublicador) {
         $conexion = $this->conectar();
         try {
@@ -70,7 +70,7 @@ class BaseDatos {
         }
     }
 
-    // 5. GUARDAR UN AVISO NUEVO USANDO LAS CLASES DE Andres (INSERT)
+    // GUARDAR UN AVISO NUEVO USANDO LAS CLASES DE Andres (INSERT)
     public function crearAviso($aviso) {
         $conexion = $this->conectar();
         try {
@@ -125,7 +125,7 @@ class BaseDatos {
         }
     }
 
-    // 6. TRANSFORMAR UNA FILA DE LA TABLA EN UN OBJETO AVISO de Andres
+    // TRANSFORMAR UNA FILA DE LA TABLA EN UN OBJETO AVISO
     public function transformarFilaEnAviso($fila) {
         $categoria = $fila['categoria'];
 
@@ -156,7 +156,7 @@ class BaseDatos {
         return null;
     }
 
-    // 7. OBTENER TODOS LOS AVISOS (SELECT para clasificados.php y admin.php)cuando lo hagamos
+    // OBTENER TODOS LOS AVISOS (SELECT para clasificados.php y admin.php)
     public function obtenerTodosLosAvisos() {
         $listaAvisos = array();
         $conexion = $this->conectar();
@@ -177,7 +177,7 @@ class BaseDatos {
         }
     }
 
-    // 8. CARGAR AVISOS DE UN PUBLICADOR USANDO AGREGACIÓN (SELECT para publicador.php)cuando los hagamos
+    // CARGAR AVISOS DE UN PUBLICADOR USANDO AGREGACIÓN (SELECT para publicador.php)
     public function cargarAvisosDePublicador($publicador) {
         $conexion = $this->conectar();
         try {
@@ -196,7 +196,7 @@ class BaseDatos {
         }
     }
 
-    // 9. BORRAR AVISO COMO ADMINISTRADOR (DELETE - Puede borrar cualquiera)
+    // BORRAR AVISO COMO ADMINISTRADOR (DELETE - Puede borrar cualquiera)
     public function borrarAvisoAdmin($idAviso) {
         $conexion = $this->conectar();
         try {
@@ -211,7 +211,7 @@ class BaseDatos {
         }
     }
 
-    // 10. BORRAR AVISO COMO PUBLICADOR (DELETE - Solo borra si es suyo)
+    // BORRAR AVISO COMO PUBLICADOR (DELETE - Solo borra si es suyo)
     public function borrarAvisoPublicador($idAviso, $nombrePublicador) {
         $conexion = $this->conectar();
         try {
@@ -226,7 +226,7 @@ class BaseDatos {
         }
     }
 
-    // 11. MODIFICAR AVISO SIN CAMBIAR CATEGORÍA (UPDATE)
+    // MODIFICAR AVISO SIN CAMBIAR CATEGORÍA (UPDATE)
     public function modificarAviso($aviso) {
         $conexion = $this->conectar();
         try {
