@@ -65,7 +65,14 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
         $this->fechaCreacion=$fechaCreacion;
     }
 
-    abstract public function getCategoria(); // esto obliga a que las clases hijas tengan esto implementado porque tienen que devolver que a categoria pertenecen
+    abstract public function getCategoria();// esto obliga a que las clases hijas tengan esto implementado porque tienen que devolver que a categoria pertenecen
+    // agregado Método común y método abstracto para Polimorfismo//
+    public function obtenerDatosBasicos() {
+        return "ID: " . $this->id . " | Fecha: " . $this->fechaCreacion . 
+               " | Autor: " . $this->nombreAutor . " (Tel: " . $this->telefonoAutor . ")";
+    }
+
+    abstract public function mostrarDetalle();
 }
 
 class AvisoLaboral extends Aviso {
@@ -107,8 +114,19 @@ class AvisoLaboral extends Aviso {
     public function getCategoria() {
         return 'laboral';
     }
+   // -Polimorfismo en AvisoLaboral ---
+    public function mostrarDetalle() {
+        $texto = "[LABORAL] " . $this->obtenerDatosBasicos() . 
+                 " | Empresa: " . $this->empresa . 
+                 " | Cargo: " . $this->descripcionCargo . 
+                 " | Sueldo: $" . $this->sueldoMensual;
+        
+        if ($this->getResaltado() == 1) {
+            return "<strong><big>" . $texto . "</big></strong>";
+        }
+        return $texto;
+    }
 }
-
 class AvisoProducto extends Aviso {
     private $descripcionProducto;
     private $precio;
@@ -137,6 +155,17 @@ class AvisoProducto extends Aviso {
 
     public function getCategoria() {
         return 'producto';
+    }
+    //  Polimorfismo en AvisoProducto ---
+    public function mostrarDetalle() {
+        $texto = "[PRODUCTO] " . $this->obtenerDatosBasicos() . 
+                 " | Producto: " . $this->descripcionProducto . 
+                 " | Precio: $" . $this->precio;
+        
+        if ($this->getResaltado() == 1) {
+            return "<strong><big>" . $texto . "</big></strong>";
+        }
+        return $texto;
     }
 }
 
@@ -196,6 +225,19 @@ class AvisoInmobiliarioVenta extends AvisoInmobiliario {
     public function getCategoria() {
         return 'inmobiliario_venta';
     }
+    //  Polimorfismo en AvisoInmobiliarioVenta ---
+    public function mostrarDetalle() {
+        $texto = "[INMOBILIARIO - VENTA] " . $this->obtenerDatosBasicos() . 
+                 " | Dirección: " . $this->getDireccion() . 
+                 " | Tipo: " . $this->getTipoPropiedad() . 
+                 " | Inmobiliaria: " . $this->getInmobiliaria() . 
+                 " | Precio Venta: $" . $this->precioVenta;
+        
+        if ($this->getResaltado() == 1) {
+            return "<strong><big>" . $texto . "</big></strong>";
+        }
+        return $texto;
+    }
 }
 
 class AvisoInmobiliarioAlquiler extends AvisoInmobiliario {
@@ -227,4 +269,19 @@ class AvisoInmobiliarioAlquiler extends AvisoInmobiliario {
     public function getCategoria() {
         return 'inmobiliario_alquiler';
     }
+   // Polimorfismo en AvisoInmobiliarioAlquiler ---
+    public function mostrarDetalle() {
+        $texto = "[INMOBILIARIO - ALQUILER] " . $this->obtenerDatosBasicos() . 
+                 " | Dirección: " . $this->getDireccion() . 
+                 " | Tipo: " . $this->getTipoPropiedad() . 
+                 " | Inmobiliaria: " . $this->getInmobiliaria() . 
+                 " | Alquiler Mensual: $" . $this->precioAlquiler . 
+                 " | Gastos Comunes: $" . $this->gastosComunes;
+        
+        if ($this->getResaltado() == 1) {
+            return "<strong><big>" . $texto . "</big></strong>";
+        }
+        return $texto;
+    }
 }
+?>
