@@ -9,6 +9,7 @@ class BaseDatos {
     private $contrasenaBD = "";
 
     // CONECTAR A LA BASE DE DATOS
+    // ";port=xxxx;dbname=" en caso de tener que cambiar de puerto
     public function conectar() {
         try {
             $conexion = new PDO("mysql:host=" . $this->servidor . ";dbname=" . $this->nombreBD, $this->usuarioBD, $this->contrasenaBD);
