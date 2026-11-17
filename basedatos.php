@@ -1,5 +1,6 @@
 <?php
-include 'Usuario.php';
+include_once 'Usuario.php';
+include_once 'avisos.php'
 
 class BaseDatos {
     private $servidor = "localhost";
@@ -8,7 +9,6 @@ class BaseDatos {
     private $contrasenaBD = "";
 
     // CONECTAR A LA BASE DE DATOS
-    // ";port=xxxx;dbname=" en caso de tener que cambiar de puerto
     public function conectar() {
         try {
             $conexion = new PDO("mysql:host=" . $this->servidor . ";dbname=" . $this->nombreBD, $this->usuarioBD, $this->contrasenaBD);
@@ -70,7 +70,7 @@ class BaseDatos {
         }
     }
 
-    // GUARDAR UN AVISO NUEVO USANDO LAS CLASES DE Andres (INSERT)
+    // GUARDAR UN AVISO NUEVO (INSERT)
     public function crearAviso($aviso) {
         $conexion = $this->conectar();
         try {
@@ -156,7 +156,7 @@ class BaseDatos {
         return null;
     }
 
-    // OBTENER TODOS LOS AVISOS (SELECT para clasificados.php y admin.php)
+    // OBTENER TODOS LOS AVISOS
     public function obtenerTodosLosAvisos() {
         $listaAvisos = array();
         $conexion = $this->conectar();
@@ -177,7 +177,7 @@ class BaseDatos {
         }
     }
 
-    // CARGAR AVISOS DE UN PUBLICADOR USANDO AGREGACIÓN (SELECT para publicador.php)
+    // CARGAR AVISOS DE UN PUBLICADOR (AGREGACIÓN)
     public function cargarAvisosDePublicador($publicador) {
         $conexion = $this->conectar();
         try {
@@ -196,7 +196,7 @@ class BaseDatos {
         }
     }
 
-    // BORRAR AVISO COMO ADMINISTRADOR (DELETE - Puede borrar cualquiera)
+    // BORRAR AVISO COMO ADMINISTRADOR
     public function borrarAvisoAdmin($idAviso) {
         $conexion = $this->conectar();
         try {
@@ -211,7 +211,7 @@ class BaseDatos {
         }
     }
 
-    // BORRAR AVISO COMO PUBLICADOR (DELETE - Solo borra si es suyo)
+    // BORRAR AVISO COMO PUBLICADOR
     public function borrarAvisoPublicador($idAviso, $nombrePublicador) {
         $conexion = $this->conectar();
         try {
@@ -221,61 +221,6 @@ class BaseDatos {
             return "Operación de borrado realizada (si el aviso era tuyo).";
         } catch (PDOException $error) {
             return "Error al borrar aviso: " . $error->getMessage();
-        } finally {
-            $conexion = null;
-        }
-    }
-
-    // MODIFICAR AVISO SIN CAMBIAR CATEGORÍA (UPDATE)
-    public function modificarAviso($aviso) {
-        $conexion = $this->conectar();
-        try {
-            $categoria = $aviso->getCategoria();
-            $sql = "";
-            $datos = array();
-
-            if ($categoria == 'laboral') {
-                $sql = "UPDATE avisos SET nombre_autor = ?, telefono_autor = ?, resaltado = ?, empresa = ?, descripcion_cargo = ?, sueldo_mensual = ? 
-                        WHERE id = ? AND usuario_publicador = ? AND categoria = 'laboral'";
-                $datos = array(
-                    $aviso->getNombreAutor(), $aviso->getTelefonoAutor(), $aviso->getResaltado(),
-                    $aviso->getEmpresa(), $aviso->getDescripcionCargo(), $aviso->getSueldoMensual(),
-                    $aviso->getId(), $aviso->getUsuarioPublicador()
-                );
-            }
-            if ($categoria == 'producto') {
-                $sql = "UPDATE avisos SET nombre_autor = ?, telefono_autor = ?, resaltado = ?, descripcion_producto = ?, precio = ? 
-                        WHERE id = ? AND usuario_publicador = ? AND categoria = 'producto'";
-                $datos = array(
-                    $aviso->getNombreAutor(), $aviso->getTelefonoAutor(), $aviso->getResaltado(),
-                    $aviso->getDescripcionProducto(), $aviso->getPrecio(),
-                    $aviso->getId(), $aviso->getUsuarioPublicador()
-                );
-            }
-            if ($categoria == 'inmobiliario_venta') {
-                $sql = "UPDATE avisos SET nombre_autor = ?, telefono_autor = ?, resaltado = ?, direccion = ?, tipo_propiedad = ?, inmobiliaria = ?, precio_venta = ? 
-                        WHERE id = ? AND usuario_publicador = ? AND categoria = 'inmobiliario_venta'";
-                $datos = array(
-                    $aviso->getNombreAutor(), $aviso->getTelefonoAutor(), $aviso->getResaltado(),
-                    $aviso->getDireccion(), $aviso->getTipoPropiedad(), $aviso->getInmobiliaria(), $aviso->getPrecioVenta(),
-                    $aviso->getId(), $aviso->getUsuarioPublicador()
-                );
-            }
-            if ($categoria == 'inmobiliario_alquiler') {
-                $sql = "UPDATE avisos SET nombre_autor = ?, telefono_autor = ?, resaltado = ?, direccion = ?, tipo_propiedad = ?, inmobiliaria = ?, precio_alquiler = ?, gastos_comunes = ? 
-                        WHERE id = ? AND usuario_publicador = ? AND categoria = 'inmobiliario_alquiler'";
-                $datos = array(
-                    $aviso->getNombreAutor(), $aviso->getTelefonoAutor(), $aviso->getResaltado(),
-                    $aviso->getDireccion(), $aviso->getTipoPropiedad(), $aviso->getInmobiliaria(), $aviso->getPrecioAlquiler(), $aviso->getGastosComunes(),
-                    $aviso->getId(), $aviso->getUsuarioPublicador()
-                );
-            }
-
-            $consulta = $conexion->prepare($sql);
-            $consulta->execute($datos);
-            return "Operación de modificación realizada.";
-        } catch (PDOException $error) {
-            return "Error al modificar aviso: " . $error->getMessage();
         } finally {
             $conexion = null;
         }
