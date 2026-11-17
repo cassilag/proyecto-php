@@ -1,5 +1,5 @@
 <?php
-require_once 'BaseDatos.php';
+include 'BaseDatos.php';
 $bd = new BaseDatos();
 $mensaje = "";
 
