@@ -1,6 +1,5 @@
 <?php
-include_once 'Usuario.php';
-include_once 'avisos.php'
+include 'Usuario.php';
 
 class BaseDatos {
     private $servidor = "localhost";
