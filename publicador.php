@@ -1,5 +1,5 @@
 <?php
-include 'BaseDatos.php';
+include_once 'BaseDatos.php';
 $bd = new BaseDatos();
 $mensaje = "";
 $misAvisos = array();
@@ -11,8 +11,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($bd->validarUsuario($u, $p, 'publicador')) {
         if ($accion == 'crear') {
-            // Ejemplo rápido creando un aviso laboral o producto básico
-            $aviso = new AvisoLaboral($_POST['autor'], $_POST['tel'], 0, $u, $_POST['empresa'], $_POST['cargo'], $_POST['sueldo'], null, date('Y-m-d H:i:s'));
+            $resaltadoValor = isset($_POST['resaltado']) ? 1 : 0;
+            $aviso = new AvisoLaboral($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['empresa'], $_POST['cargo'], $_POST['sueldo'], null, date('Y-m-d H:i:s'));
             $mensaje = $bd->crearAviso($aviso);
         }
         if ($accion == 'borrar') {
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Ver mis avisos</button>
     </form>
 
-    <?php foreach ($misAvisos as $a): ?>
+    <?php foreach ($misAvisos as $a) { ?>
         <div>
             <?php echo $a->mostrarDetalle(); ?>
             <form method="POST">
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit">Borrar</button>
             </form>
         </div>
-    <?php endforeach; ?>
+    <?php } ?>
 
     <hr>
     <h3>Crear Aviso Laboral</h3>
@@ -66,6 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Empresa: <input type="text" name="empresa" required>
         Cargo: <input type="text" name="cargo" required>
         Sueldo: <input type="number" name="sueldo" required><br>
+        <label><input type="checkbox" name="resaltado" value="1"> Resaltado</label><br>
         <button type="submit">Crear</button>
     </form>
 </body>
