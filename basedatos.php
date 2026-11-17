@@ -10,7 +10,7 @@ class BaseDatos {
     // CONECTAR A LA BASE DE DATOS
     public function conectar() {
         try {
-            $conexion = new PDO("mysql:host=" . $this->servidor . ";dbname=" . $this->nombreBD, $this->usuarioBD, $this->contrasenaBD);
+            $conexion = new PDO("mysql:host=" . $this->servidor . ";port=3307;dbname=" . $this->nombreBD, $this->usuarioBD, $this->contrasenaBD);
             return $conexion;
         } catch (PDOException $error) {
             echo "Error de conexión: " . $error->getMessage();
