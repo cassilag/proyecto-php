@@ -1,5 +1,5 @@
 <?php
-include_once 'BaseDatos.php';
+include 'BaseDatos.php';
 $bd = new BaseDatos();
 $lista = $bd->obtenerTodosLosAvisos();
 ?>
