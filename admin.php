@@ -25,7 +25,7 @@ $todos = $bd->obtenerTodosLosAvisos();
     <hr>
     <p><b><?php echo $mensaje; ?></b></p>
 
-    <?php foreach ($todos as $a): ?>
+    <?php foreach ($todos as $a) { ?>
         <div>
             <?php echo $a->mostrarDetalle(); ?>
             <form method="POST">
@@ -37,6 +37,6 @@ $todos = $bd->obtenerTodosLosAvisos();
             </form>
         </div>
         <hr>
-    <?php endforeach; ?>
+    <?php } ?>
 </body>
 </html>
