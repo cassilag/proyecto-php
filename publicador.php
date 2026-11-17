@@ -1,5 +1,5 @@
 <?php
-require_once 'BaseDatos.php';
+include_once 'BaseDatos.php';
 $bd = new BaseDatos();
 $mensaje = "";
 $misAvisos = array();
