@@ -1,5 +1,5 @@
 <?php
-require_once 'avisos.php';
+include_once 'avisos.php';
 
 abstract class Usuario {
     private $nombreUsuario;
