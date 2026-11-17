@@ -10,12 +10,12 @@ $lista = $bd->obtenerTodosLosAvisos();
     <h1>Avisos Clasificados</h1>
     <a href="clasificados.php">Ver</a> | <a href="publicador.php">Publicar</a> | <a href="admin.php">Admin</a>
     <hr>
-    <?php foreach ($lista as $a): ?>
+    <?php foreach ($lista as $a) { ?>
         <div>
             <?php echo $a->mostrarDetalle(); ?>
             <p>Autor: <?php echo $a->getNombreAutor(); ?> - Tel: <?php echo $a->getTelefonoAutor(); ?></p>
         </div>
         <hr>
-    <?php endforeach; ?>
+    <?php } ?>
 </body>
 </html>
