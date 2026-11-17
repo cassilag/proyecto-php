@@ -10,11 +10,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $accion = $_POST['accion'];
 
     if ($bd->validarUsuario($u, $p, 'publicador')) {
-        if ($accion == 'crear') {
-            $resaltadoValor = isset($_POST['resaltado']) ? 1 : 0;
+        $resaltadoValor = isset($_POST['resaltado']) ? 1 : 0;
+
+        if ($accion == 'crear_laboral') {
             $aviso = new AvisoLaboral($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['empresa'], $_POST['cargo'], $_POST['sueldo'], null, date('Y-m-d H:i:s'));
             $mensaje = $bd->crearAviso($aviso);
+        } elseif ($accion == 'crear_producto') {
+            $aviso = new AvisoProducto($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['descripcion_producto'], $_POST['precio'], null, date('Y-m-d H:i:s'));
+            $mensaje = $bd->crearAviso($aviso);
+        } elseif ($accion == 'crear_venta') {
+            $aviso = new AvisoInmobiliarioVenta($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_venta'], null, date('Y-m-d H:i:s'));
+            $mensaje = $bd->crearAviso($aviso);
+        } elseif ($accion == 'crear_alquiler') {
+            $aviso = new AvisoInmobiliarioAlquiler($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_alquiler'], $_POST['gastos_comunes'], null, date('Y-m-d H:i:s'));
+            $mensaje = $bd->crearAviso($aviso);
         }
+
         if ($accion == 'borrar') {
             $mensaje = $bd->borrarAvisoPublicador($_POST['id'], $u);
         }
@@ -53,21 +64,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <button type="submit">Borrar</button>
             </form>
         </div>
+        <hr>
     <?php } ?>
 
     <hr>
     <h3>Crear Aviso Laboral</h3>
     <form method="POST">
-        <input type="hidden" name="accion" value="crear">
-        Usuario: <input type="text" name="usuario" required>
-        Pass: <input type="password" name="contrasena" required><br>
-        Autor: <input type="text" name="autor" required>
-        Tel: <input type="text" name="tel" required><br>
-        Empresa: <input type="text" name="empresa" required>
-        Cargo: <input type="text" name="cargo" required>
-        Sueldo: <input type="number" name="sueldo" required><br>
-        <label><input type="checkbox" name="resaltado" value="1"> Resaltado</label><br>
-        <button type="submit">Crear</button>
+        <input type="hidden" name="accion" value="crear_laboral">
+        Usuario: <input type="text" name="usuario" required> Pass: <input type="password" name="contrasena" required><br>
+        Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
+        Empresa: <input type="text" name="empresa" required> Cargo: <input type="text" name="cargo" required> Sueldo: <input type="number" name="sueldo" required><br>
+        <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
+        <button type="submit">Crear Laboral</button>
+    </form>
+
+    <hr>
+    <h3>Crear Aviso Producto</h3>
+    <form method="POST">
+        <input type="hidden" name="accion" value="crear_producto">
+        Usuario: <input type="text" name="usuario" required> Pass: <input type="password" name="contrasena" required><br>
+        Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
+        Descripción: <input type="text" name="descripcion_producto" required> Precio: <input type="number" name="precio" required><br>
+        <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
+        <button type="submit">Crear Producto</button>
+    </form>
+
+    <hr>
+    <h3>Crear Aviso Inmobiliario - Venta</h3>
+    <form method="POST">
+        <input type="hidden" name="accion" value="crear_venta">
+        Usuario: <input type="text" name="usuario" required> Pass: <input type="password" name="contrasena" required><br>
+        Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
+        Dirección: <input type="text" name="direccion" required> Tipo (Casa/Apto): <input type="text" name="tipo_propiedad" required><br>
+        Inmobiliaria: <input type="text" name="inmobiliaria" required> Precio Venta: <input type="number" name="precio_venta" required><br>
+        <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
+        <button type="submit">Crear Venta</button>
+    </form>
+
+    <hr>
+    <h3>Crear Aviso Inmobiliario - Alquiler</h3>
+    <form method="POST">
+        <input type="hidden" name="accion" value="crear_alquiler">
+        Usuario: <input type="text" name="usuario" required> Pass: <input type="password" name="contrasena" required><br>
+        Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
+        Dirección: <input type="text" name="direccion" required> Tipo (Casa/Apto): <input type="text" name="tipo_propiedad" required><br>
+        Inmobiliaria: <input type="text" name="inmobiliaria" required> Alquiler: <input type="number" name="precio_alquiler" required> Gastos Comunes: <input type="number" name="gastos_comunes" required><br>
+        <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
+        <button type="submit">Crear Alquiler</button>
     </form>
 </body>
 </html>
