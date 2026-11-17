@@ -1,6 +1,5 @@
 <?php
-require_once 'avisos.php';
-require_once 'Usuario.php';
+include 'Usuario.php';
 
 class BaseDatos {
     private $servidor = "localhost";
