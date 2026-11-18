@@ -7,10 +7,62 @@ class BaseDatos {
     private $usuarioBD = "root";
     private $contrasenaBD = "";
 
-    // CONECTAR A LA BASE DE DATOS
+// CONECTAR A LA BASE DE DATOS Y CREAR LAS TABLAS SI NO EXISTEN
+// CONECTAR A LA BASE DE DATOS Y CREAR TODO LO NECESARIO AUTOMÁTICAMENTE
     public function conectar() {
         try {
-            $conexion = new PDO("mysql:host=" . $this->servidor . "dbname=" . $this->nombreBD, $this->usuarioBD, $this->contrasenaBD);
+            // 1. Nos conectamos solo al servidor
+            $conexionTemp = new PDO("mysql:host=" . $this->servidor, $this->usuarioBD, $this->contrasenaBD);
+            $conexionTemp->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // 2. Creamos la base de datos si no existe
+            $sqlDB = "CREATE DATABASE IF NOT EXISTS `" . $this->nombreBD . "` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+            $conexionTemp->exec($sqlDB);
+
+            // 3. Nos conectamos a la base de datos ya creada
+            $conexion = new PDO("mysql:host=" . $this->servidor . ";dbname=" . $this->nombreBD . ";charset=utf8", $this->usuarioBD, $this->contrasenaBD);
+            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            // 4. Creamos la tabla 'usuarios' si no existe
+            $sqlUsuarios = "CREATE TABLE IF NOT EXISTS usuarios (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                nombre_usuario VARCHAR(50) NOT NULL UNIQUE,
+                contrasena VARCHAR(50) NOT NULL,
+                rol VARCHAR(20) NOT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            $conexion->exec($sqlUsuarios);
+
+            // 5. Creamos la tabla 'avisos' con todos los campos necesarios
+            $sqlAvisos = "CREATE TABLE IF NOT EXISTS avisos (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                categoria VARCHAR(50) NOT NULL,
+                nombre_autor VARCHAR(100) NOT NULL,
+                telefono_autor VARCHAR(50) NOT NULL,
+                resaltado TINYINT(1) DEFAULT 0,
+                usuario_publicador VARCHAR(50) NOT NULL,
+                fecha_creacion DATETIME NOT NULL,
+                empresa VARCHAR(100) DEFAULT NULL,
+                descripcion_cargo TEXT DEFAULT NULL,
+                sueldo_mensual DECIMAL(10,2) DEFAULT NULL,
+                descripcion_producto TEXT DEFAULT NULL,
+                precio DECIMAL(10,2) DEFAULT NULL,
+                direccion VARCHAR(150) DEFAULT NULL,
+                tipo_propiedad VARCHAR(50) DEFAULT NULL,
+                inmobiliaria VARCHAR(100) DEFAULT NULL,
+                precio_venta DECIMAL(10,2) DEFAULT NULL,
+                precio_alquiler DECIMAL(10,2) DEFAULT NULL,
+                gastos_comunes DECIMAL(10,2) DEFAULT NULL
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+            $conexion->exec($sqlAvisos);
+
+            // 6. Insertamos usuarios por defecto si la tabla está vacía
+            $sqlCheck = "SELECT COUNT(*) FROM usuarios";
+            $res = $conexion->query($sqlCheck);
+            if ($res->fetchColumn() == 0) {
+                $conexion->exec("INSERT INTO usuarios (nombre_usuario, contrasena, rol) VALUES ('admin', '1234', 'admin')");
+                $conexion->exec("INSERT INTO usuarios (nombre_usuario, contrasena, rol) VALUES ('publicador', '1234', 'publicador')");
+            }
+
             return $conexion;
         } catch (PDOException $error) {
             echo "Error de conexión: " . $error->getMessage();
@@ -49,21 +101,6 @@ class BaseDatos {
             return "Publicador creado con éxito.";
         } catch (PDOException $error) {
             return "Error al crear publicador: " . $error->getMessage();
-        } finally {
-            $conexion = null;
-        }
-    }
-
-    // BORRAR PUBLICADOR (DELETE)
-    public function borrarPublicador($nombrePublicador) {
-        $conexion = $this->conectar();
-        try {
-            $sql = "DELETE FROM usuarios WHERE nombre_usuario = ? AND rol = 'publicador'";
-            $consulta = $conexion->prepare($sql);
-            $consulta->execute(array($nombrePublicador));
-            return "Publicador borrado.";
-        } catch (PDOException $error) {
-            return "Error al borrar publicador: " . $error->getMessage();
         } finally {
             $conexion = null;
         }
@@ -176,7 +213,7 @@ class BaseDatos {
         }
     }
 
-    // CARGAR AVISOS DE UN PUBLICADOR (AGREGACIÓN)
+    // CARGAR AVISOS DE UN PUBLICADOR
     public function cargarAvisosDePublicador($publicador) {
         $conexion = $this->conectar();
         try {
