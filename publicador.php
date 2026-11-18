@@ -1,39 +1,46 @@
 <?php
-include 'BaseDatos.php';
+include 'basedatos.php';
 $bd = new BaseDatos();
 $mensaje = "";
 $misAvisos = array();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $u = $_POST['usuario'];
-    $p = $_POST['contrasena'];
     $accion = $_POST['accion'];
 
-    if ($bd->validarUsuario($u, $p, 'publicador')) {
-        $resaltadoValor = isset($_POST['resaltado']) ? 1 : 0;
-
-        if ($accion == 'crear_laboral') {
-            $aviso = new AvisoLaboral($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['empresa'], $_POST['cargo'], $_POST['sueldo'], null, date('Y-m-d H:i:s'));
-            $mensaje = $bd->crearAviso($aviso);
-        } elseif ($accion == 'crear_producto') {
-            $aviso = new AvisoProducto($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['descripcion_producto'], $_POST['precio'], null, date('Y-m-d H:i:s'));
-            $mensaje = $bd->crearAviso($aviso);
-        } elseif ($accion == 'crear_venta') {
-            $aviso = new AvisoInmobiliarioVenta($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_venta'], null, date('Y-m-d H:i:s'));
-            $mensaje = $bd->crearAviso($aviso);
-        } elseif ($accion == 'crear_alquiler') {
-            $aviso = new AvisoInmobiliarioAlquiler($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_alquiler'], $_POST['gastos_comunes'], null, date('Y-m-d H:i:s'));
-            $mensaje = $bd->crearAviso($aviso);
-        }
-
-        if ($accion == 'borrar') {
-            $mensaje = $bd->borrarAvisoPublicador($_POST['id'], $u);
-        }
-        $pub = new Publicador($u, $p);
-        $bd->cargarAvisosDePublicador($pub);
-        $misAvisos = $pub->getMisAvisos();
+    // Si la acción es crear un publicador nuevo no requiere login previo
+    if ($accion == 'crear_pub') {
+        $nuevoPub = new Publicador($_POST['nuevo_usuario'], $_POST['nueva_contrasena']);
+        $mensaje = $bd->crearPublicador($nuevoPub);
     } else {
-        $mensaje = "Error de login";
+        // Para el resto de acciones se valida el usuario y contraseña del formulario
+        $u = $_POST['usuario'];
+        $p = $_POST['contrasena'];
+
+        if ($bd->validarUsuario($u, $p, 'publicador')) {
+            $resaltadoValor = isset($_POST['resaltado']) ? 1 : 0;
+
+            if ($accion == 'crear_laboral') {
+                $aviso = new AvisoLaboral($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['empresa'], $_POST['cargo'], $_POST['sueldo'], null, date('Y-m-d H:i:s'));
+                $mensaje = $bd->crearAviso($aviso);
+            } elseif ($accion == 'crear_producto') {
+                $aviso = new AvisoProducto($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['descripcion_producto'], $_POST['precio'], null, date('Y-m-d H:i:s'));
+                $mensaje = $bd->crearAviso($aviso);
+            } elseif ($accion == 'crear_venta') {
+                $aviso = new AvisoInmobiliarioVenta($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_venta'], null, date('Y-m-d H:i:s'));
+                $mensaje = $bd->crearAviso($aviso);
+            } elseif ($accion == 'crear_alquiler') {
+                $aviso = new AvisoInmobiliarioAlquiler($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_alquiler'], $_POST['gastos_comunes'], null, date('Y-m-d H:i:s'));
+                $mensaje = $bd->crearAviso($aviso);
+            } elseif ($accion == 'borrar') {
+                $mensaje = $bd->borrarAvisoPublicador($_POST['id'], $u);
+            }
+
+            $pub = new Publicador($u, $p);
+            $bd->cargarAvisosDePublicador($pub);
+            $misAvisos = $pub->getMisAvisos();
+        } else {
+            $mensaje = "Error de login";
+        }
     }
 }
 ?>
@@ -45,7 +52,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <a href="clasificados.php">Ver</a> | <a href="publicador.php">Publicar</a> | <a href="admin.php">Admin</a>
     <hr>
     <p><b><?php echo $mensaje; ?></b></p>
-    
+
+    <h3>Nuevo Publicador</h3>
+    <form method="POST">
+        <input type="hidden" name="accion" value="crear_pub">
+        Nuevo Usuario: <input type="text" name="nuevo_usuario" required> 
+        Nueva Contraseña: <input type="password" name="nueva_contrasena" required>
+        <button type="submit">Crear Cuenta</button>
+    </form>
+
+    <hr>
+    <h3>Ver mis avisos</h3>
     <form method="POST">
         <input type="hidden" name="accion" value="ver">
         Usuario: <input type="text" name="usuario" required>
