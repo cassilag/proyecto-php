@@ -6,8 +6,7 @@ class BaseDatos {
     private $nombreBD = "clasificados_bd";
     private $usuarioBD = "root";
     private $contrasenaBD = "";
-
-// CONECTAR A LA BASE DE DATOS Y CREAR LAS TABLAS SI NO EXISTEN
+    
 // CONECTAR A LA BASE DE DATOS Y CREAR TODO LO NECESARIO AUTOMÁTICAMENTE
     public function conectar() {
         try {
