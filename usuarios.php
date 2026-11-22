@@ -5,7 +5,7 @@ abstract class Usuario {
     private $nombreUsuario;
     private $contrasena;
     private $email;
-    private $email;
+    private $telefono;
 
     public function __construct($nombreUsuario, $contrasena, $email = "", $telefono = "") {
         $this->nombreUsuario = $nombreUsuario;
