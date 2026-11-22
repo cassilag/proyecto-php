@@ -2,6 +2,7 @@
 
 abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un tipo, asi que no se puede crear un aviso sin tipo porque la clase es abstracta
     private $id;
+    private $titulo;                  
     private $nombreAutor;
     private $telefonoAutor;
     private $resaltado;
@@ -25,6 +26,13 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
         $this->id=$id;
     }
 
+     public function getTitulo() {
+        return $this->titulo;
+    }
+
+    public function setTitulo($titulo) {
+        $this->id=$titulo;
+   }                    
     public function getNombreAutor() {
         return $this->nombreAutor;
     }
@@ -64,11 +72,11 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     public function setFechaCreacion($fechaCreacion) {
         $this->fechaCreacion=$fechaCreacion;
     }
-
+                      
     abstract public function getCategoria();// esto obliga a que las clases hijas tengan esto implementado porque tienen que devolver que a categoria pertenecen
     // agregado Método común y método abstracto para Polimorfismo
     public function obtenerDatosBasicos() {
-        return "ID: " . $this->id . " | Fecha: " . $this->fechaCreacion . 
+        return "ID: " . $this->id . " | Titulo: ".this->titulo. " | Fecha: " . $this->fechaCreacion . 
                " | Autor: " . $this->nombreAutor . " (Tel: " . $this->telefonoAutor . ")";
     }
 
