@@ -1,12 +1,12 @@
 <?php
 include 'basedatos.php';
-$bd = new BaseDatos();
+$bd = new BaseDatos('admin');
 $mensaje = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $au = $_POST['admin_user'];
     $ap = $_POST['admin_pass'];
-    if ($bd->validarUsuario($au, $ap, 'admin')) {
+    if ($bd->validarUsuario($au, $ap, 'administrador')) {
         if ($_POST['accion'] == 'borrar') {
             $mensaje = $bd->borrarAvisoAdmin($_POST['id']);
         }
