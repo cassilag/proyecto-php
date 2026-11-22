@@ -21,15 +21,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($accion == 'crear_laboral') {
                 $aviso = new AvisoLaboral($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['empresa'], $_POST['cargo'], $_POST['sueldo'], null, date('Y-m-d H:i:s'));
+                $aviso->setTitulo($_POST['titulo']);
                 $mensaje = $bd->crearAviso($aviso);
             } elseif ($accion == 'crear_producto') {
                 $aviso = new AvisoProducto($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['descripcion_producto'], $_POST['precio'], null, date('Y-m-d H:i:s'));
+                $aviso->setTitulo($_POST['titulo']);
                 $mensaje = $bd->crearAviso($aviso);
             } elseif ($accion == 'crear_venta') {
                 $aviso = new AvisoInmobiliarioVenta($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_venta'], null, date('Y-m-d H:i:s'));
+                $aviso->setTitulo($_POST['titulo']);
                 $mensaje = $bd->crearAviso($aviso);
             } elseif ($accion == 'crear_alquiler') {
                 $aviso = new AvisoInmobiliarioAlquiler($_POST['autor'], $_POST['tel'], $resaltadoValor, $u, $_POST['direccion'], $_POST['tipo_propiedad'], $_POST['inmobiliaria'], $_POST['precio_alquiler'], $_POST['gastos_comunes'], null, date('Y-m-d H:i:s'));
+                $aviso->setTitulo($_POST['titulo']);
                 $mensaje = $bd->crearAviso($aviso);
             } elseif ($accion == 'borrar') {
                 $mensaje = $bd->borrarAvisoPublicador($_POST['id'], $u);
