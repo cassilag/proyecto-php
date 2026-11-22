@@ -4,10 +4,10 @@ $bd = new BaseDatos();
 $mensaje = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $au = $_POST['admin_user'] ?? '';
-    $ap = $_POST['admin_pass'] ?? '';
+    $au = $_POST['admin_user'];
+    $ap = $_POST['admin_pass'];
     if ($bd->validarUsuario($au, $ap, 'admin')) {
-        if (($_POST['accion'] ?? '') == 'borrar') {
+        if ($_POST['accion'] == 'borrar') {
             $mensaje = $bd->borrarAvisoAdmin($_POST['id']);
         }
     } else {
@@ -18,7 +18,7 @@ $todos = $bd->obtenerTodosLosAvisos();
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Admin</title></head>
+<head><meta charset="UTF-8"><title>Admin</title><link rel="stylesheet" href="estilos.css"></head>
 <body>
     <h1>Admin</h1>
     <a href="clasificados.php">Ver</a> | <a href="publicador.php">Publicar</a> | <a href="admin.php">Admin</a>
