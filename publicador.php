@@ -1,6 +1,6 @@
 <?php
 include 'basedatos.php';
-$bd = new BaseDatos();
+$bd = new BaseDatos('publicador');
 $mensaje = "";
 $misAvisos = array();
 
@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Si la acción es crear un publicador nuevo no requiere login previo
     if ($accion == 'crear_pub') {
-        $nuevoPub = new Publicador($_POST['nuevo_usuario'], $_POST['nueva_contrasena']);
+        $nuevoPub = new Publicador($_POST['nuevo_usuario'], $_POST['nueva_contrasena'], $_POST['nuevo_email'], $_POST['nuevo_tel']);
         $mensaje = $bd->crearPublicador($nuevoPub);
     } else {
         // Para el resto de acciones se valida el usuario y contraseña del formulario
@@ -58,6 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="hidden" name="accion" value="crear_pub">
         Nuevo Usuario: <input type="text" name="nuevo_usuario" required> 
         Nueva Contraseña: <input type="password" name="nueva_contrasena" required>
+        Email: <input type="email" name="nuevo_email" required>
+        Teléfono: <input type="text" name="nuevo_tel">
         <button type="submit">Crear Cuenta</button>
     </form>
 
@@ -91,6 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Usuario: <input type="text" name="usuario" required> Pass: <input type="password" name="contrasena" required><br>
         Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
         Empresa: <input type="text" name="empresa" required> Cargo: <input type="text" name="cargo" required> Sueldo: <input type="number" name="sueldo" required><br>
+        Título: <input type="text" name="titulo" required>
         <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
         <button type="submit">Crear Laboral</button>
     </form>
@@ -102,6 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Usuario: <input type="text" name="usuario" required> Pass: <input type="password" name="contrasena" required><br>
         Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
         Descripción: <input type="text" name="descripcion_producto" required> Precio: <input type="number" name="precio" required><br>
+        Título: <input type="text" name="titulo" required><br>
         <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
         <button type="submit">Crear Producto</button>
     </form>
@@ -114,6 +118,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
         Dirección: <input type="text" name="direccion" required> Tipo (Casa/Apto): <input type="text" name="tipo_propiedad" required><br>
         Inmobiliaria: <input type="text" name="inmobiliaria" required> Precio Venta: <input type="number" name="precio_venta" required><br>
+        Título: <input type="text" name="titulo" required><br>
         <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
         <button type="submit">Crear Venta</button>
     </form>
@@ -126,6 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Autor: <input type="text" name="autor" required> Tel: <input type="text" name="tel" required><br>
         Dirección: <input type="text" name="direccion" required> Tipo (Casa/Apto): <input type="text" name="tipo_propiedad" required><br>
         Inmobiliaria: <input type="text" name="inmobiliaria" required> Alquiler: <input type="number" name="precio_alquiler" required> Gastos Comunes: <input type="number" name="gastos_comunes" required><br>
+        Título: <input type="text" name="titulo" required><br>
         <label><input type="checkbox" name="resaltado" value="1"> Resaltado (Paga el doble)</label><br>
         <button type="submit">Crear Alquiler</button>
     </form>
