@@ -1,21 +1,33 @@
 <?php
 
-abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un tipo, asi que no se puede crear un aviso sin tipo porque la clase es abstracta
+abstract class Aviso {
     private $id;
-    private $titulo;                  
+    private $titulo;
     private $nombreAutor;
     private $telefonoAutor;
     private $resaltado;
     private $usuarioPublicador;
     private $fechaCreacion;
 
-    public function __construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $id, $fechaCreacion) {
-        $this->nombreAutor = $nombreAutor;
-        $this->telefonoAutor = $telefonoAutor;
-        $this->resaltado = $resaltado;
-        $this->usuarioPublicador = $usuarioPublicador;
-        $this->id = $id;
-        $this->fechaCreacion = $fechaCreacion;
+    public function __construct($titulo, $nombreAutor,$telefonoAutor, $resaltado,$usuarioPublicador, $id,$fechaCreacion) {
+        $this->titulo =$titulo;
+        $this->nombreAutor =$nombreAutor;
+        $this->telefonoAutor =$telefonoAutor;
+        $this->resaltado =$resaltado;
+        $this->usuarioPublicador =$usuarioPublicador;
+        $this->id =$id;
+        $this->fechaCreacion =$fechaCreacion;
+    }
+
+    protected function esc($valor) {
+        return htmlspecialchars((string)$valor, ENT_QUOTES, 'UTF-8');
+    }
+
+    protected function envolverResaltado($html) {
+        if ((int)$this->resaltado === 1) {
+            return "<strong><big>" . $html . "</big></strong>";
+        }
+        return $html;
     }
 
     public function getId() {
@@ -23,22 +35,23 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     public function setId($id) {
-        $this->id=$id;
+        $this->id =$id;
     }
 
-     public function getTitulo() {
+    public function getTitulo() {
         return $this->titulo;
     }
 
     public function setTitulo($titulo) {
-        $this->titulo=$titulo;
-   }                    
+        $this->titulo =$titulo;
+    }
+
     public function getNombreAutor() {
         return $this->nombreAutor;
     }
 
     public function setNombreAutor($nombreAutor) {
-        $this->nombreAutor=$nombreAutor;
+        $this->nombreAutor =$nombreAutor;
     }
 
     public function getTelefonoAutor() {
@@ -46,7 +59,7 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     public function setTelefonoAutor($telefonoAutor) {
-        $this->telefonoAutor=$telefonoAutor;
+        $this->telefonoAutor =$telefonoAutor;
     }
 
     public function getResaltado() {
@@ -54,7 +67,7 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     public function setResaltado($resaltado) {
-        $this->resaltado=$resaltado;
+        $this->resaltado =$resaltado;
     }
 
     public function getUsuarioPublicador() {
@@ -62,7 +75,7 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     public function setUsuarioPublicador($usuarioPublicador) {
-        $this->usuarioPublicador=$usuarioPublicador;
+        $this->usuarioPublicador =$usuarioPublicador;
     }
 
     public function getFechaCreacion() {
@@ -70,14 +83,17 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     public function setFechaCreacion($fechaCreacion) {
-        $this->fechaCreacion=$fechaCreacion;
+        $this->fechaCreacion =$fechaCreacion;
     }
-                      
-    abstract public function getCategoria();// esto obliga a que las clases hijas tengan esto implementado porque tienen que devolver que a categoria pertenecen
-    // agregado Método común y método abstracto para Polimorfismo
+
+    abstract public function getCategoria();
+
     public function obtenerDatosBasicos() {
-        return "ID: " . $this->id . " | Titulo: ". $this->titulo. " | Fecha: " . $this->fechaCreacion . 
-               " | Autor: " . $this->nombreAutor . " (Tel: " . $this->telefonoAutor . ")";
+        return "ID: " . $this->esc($this->id) .
+               " | Título: " . $this->esc($this->titulo) .
+               " | Fecha: " . $this->esc($this->fechaCreacion) .
+               " | Autor: " . $this->esc($this->nombreAutor) .
+               " (Tel: " . $this->esc($this->telefonoAutor) . ")";
     }
 
     abstract public function mostrarDetalle();
@@ -88,11 +104,11 @@ class AvisoLaboral extends Aviso {
     private $descripcionCargo;
     private $sueldoMensual;
 
-    public function __construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $empresa, $descripcionCargo, $sueldoMensual, $id, $fechaCreacion) {
-        parent::__construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $id, $fechaCreacion);
-        $this->empresa = $empresa;
-        $this->descripcionCargo = $descripcionCargo;
-        $this->sueldoMensual = $sueldoMensual;
+    public function __construct($titulo,$nombreAutor, $telefonoAutor,$resaltado, $usuarioPublicador,$empresa, $descripcionCargo,$sueldoMensual, $id,$fechaCreacion) {
+        parent::__construct($titulo, $nombreAutor,$telefonoAutor, $resaltado,$usuarioPublicador, $id,$fechaCreacion);
+        $this->empresa =$empresa;
+        $this->descripcionCargo =$descripcionCargo;
+        $this->sueldoMensual =$sueldoMensual;
     }
 
     public function getEmpresa() {
@@ -100,7 +116,7 @@ class AvisoLaboral extends Aviso {
     }
 
     public function setEmpresa($empresa) {
-        $this->empresa=$empresa;
+        $this->empresa =$empresa;
     }
 
     public function getDescripcionCargo() {
@@ -108,7 +124,7 @@ class AvisoLaboral extends Aviso {
     }
 
     public function setDescripcionCargo($descripcionCargo) {
-        $this->descripcionCargo=$descripcionCargo;
+        $this->descripcionCargo =$descripcionCargo;
     }
 
     public function getSueldoMensual() {
@@ -116,33 +132,31 @@ class AvisoLaboral extends Aviso {
     }
 
     public function setSueldoMensual($sueldoMensual) {
-        $this->sueldoMensual=$sueldoMensual;
+        $this->sueldoMensual =$sueldoMensual;
     }
 
     public function getCategoria() {
         return 'laboral';
     }
-   // Polimorfismo en AvisoLaboral
+
     public function mostrarDetalle() {
-        $texto = "[LABORAL] " . $this->obtenerDatosBasicos() . 
-                 " | Empresa: " . $this->empresa . 
-                 " | Cargo: " . $this->descripcionCargo . 
-                 " | Sueldo: $" . $this->sueldoMensual;
-        
-        if ($this->getResaltado() == 1) {
-            return "<strong><big>" . $texto . "</big></strong>";
-        }
-        return $texto;
+        $sueldoTexto = ($this->sueldoMensual !== null && $this->sueldoMensual !== '') ? "$" . $this->esc($this->sueldoMensual) : "A convenir";
+        $texto = "[LABORAL] " . $this->obtenerDatosBasicos() .
+                 " | Empresa: " . $this->esc($this->empresa) .
+                 " | Cargo: " . $this->esc($this->descripcionCargo) .
+                 " | Sueldo: " . $sueldoTexto;
+        return $this->envolverResaltado($texto);
     }
 }
+
 class AvisoProducto extends Aviso {
     private $descripcionProducto;
     private $precio;
 
-    public function __construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $descripcionProducto, $precio, $id, $fechaCreacion) {
-        parent::__construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $id, $fechaCreacion);
-        $this->descripcionProducto = $descripcionProducto;
-        $this->precio = $precio;
+    public function __construct($titulo, $nombreAutor,$telefonoAutor, $resaltado,$usuarioPublicador, $descripcionProducto,$precio, $id,$fechaCreacion) {
+        parent::__construct($titulo, $nombreAutor,$telefonoAutor, $resaltado,$usuarioPublicador, $id,$fechaCreacion);
+        $this->descripcionProducto =$descripcionProducto;
+        $this->precio =$precio;
     }
 
     public function getDescripcionProducto() {
@@ -150,7 +164,7 @@ class AvisoProducto extends Aviso {
     }
 
     public function setDescripcionProducto($descripcionProducto) {
-        $this->descripcionProducto=$descripcionProducto;
+        $this->descripcionProducto =$descripcionProducto;
     }
 
     public function getPrecio() {
@@ -158,35 +172,31 @@ class AvisoProducto extends Aviso {
     }
 
     public function setPrecio($precio) {
-        $this->precio=$precio;
+        $this->precio =$precio;
     }
 
     public function getCategoria() {
         return 'producto';
     }
-    //  Polimorfismo en AvisoProducto ---
+
     public function mostrarDetalle() {
-        $texto = "[PRODUCTO] " . $this->obtenerDatosBasicos() . 
-                 " | Producto: " . $this->descripcionProducto . 
-                 " | Precio: $" . $this->precio;
-        
-        if ($this->getResaltado() == 1) {
-            return "<strong><big>" . $texto . "</big></strong>";
-        }
-        return $texto;
+        $texto = "[PRODUCTO] " . $this->obtenerDatosBasicos() .
+                 " | Producto: " . $this->esc($this->descripcionProducto) .
+                 " | Precio: $" . $this->esc($this->precio);
+        return $this->envolverResaltado($texto);
     }
 }
 
-abstract class AvisoInmobiliario extends Aviso { // es abstracta porque la idea es que no se pueda crear un objeto de esta clase si no es alquiler o compra
+abstract class AvisoInmobiliario extends Aviso {
     private $direccion;
     private $tipoPropiedad;
     private $inmobiliaria;
 
-    public function __construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $direccion, $tipoPropiedad, $inmobiliaria, $id, $fechaCreacion) {
-        parent::__construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $id, $fechaCreacion);
-        $this->direccion = $direccion;
-        $this->tipoPropiedad = $tipoPropiedad;
-        $this->inmobiliaria = $inmobiliaria;
+    public function __construct($titulo,$nombreAutor, $telefonoAutor,$resaltado, $usuarioPublicador,$direccion, $tipoPropiedad,$inmobiliaria, $id,$fechaCreacion) {
+        parent::__construct($titulo, $nombreAutor,$telefonoAutor, $resaltado,$usuarioPublicador, $id,$fechaCreacion);
+        $this->direccion =$direccion;
+        $this->tipoPropiedad =$tipoPropiedad;
+        $this->inmobiliaria =$inmobiliaria;
     }
 
     public function getDireccion() {
@@ -194,7 +204,7 @@ abstract class AvisoInmobiliario extends Aviso { // es abstracta porque la idea 
     }
 
     public function setDireccion($direccion) {
-        $this->direccion=$direccion;
+        $this->direccion =$direccion;
     }
 
     public function getTipoPropiedad() {
@@ -202,7 +212,7 @@ abstract class AvisoInmobiliario extends Aviso { // es abstracta porque la idea 
     }
 
     public function setTipoPropiedad($tipoPropiedad) {
-        $this->tipoPropiedad=$tipoPropiedad;
+        $this->tipoPropiedad =$tipoPropiedad;
     }
 
     public function getInmobiliaria() {
@@ -210,16 +220,16 @@ abstract class AvisoInmobiliario extends Aviso { // es abstracta porque la idea 
     }
 
     public function setInmobiliaria($inmobiliaria) {
-        $this->inmobiliaria=$inmobiliaria;
+        $this->inmobiliaria =$inmobiliaria;
     }
 }
 
 class AvisoInmobiliarioVenta extends AvisoInmobiliario {
     private $precioVenta;
 
-    public function __construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $direccion, $tipoPropiedad, $inmobiliaria, $precioVenta, $id, $fechaCreacion) {
-        parent::__construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $direccion, $tipoPropiedad, $inmobiliaria, $id, $fechaCreacion);
-        $this->precioVenta = $precioVenta;
+    public function __construct($titulo, $nombreAutor,$telefonoAutor, $resaltado,$usuarioPublicador, $direccion,$tipoPropiedad, $inmobiliaria,$precioVenta, $id,$fechaCreacion) {
+        parent::__construct($titulo,$nombreAutor, $telefonoAutor,$resaltado, $usuarioPublicador,$direccion, $tipoPropiedad,$inmobiliaria, $id,$fechaCreacion);
+        $this->precioVenta =$precioVenta;
     }
 
     public function getPrecioVenta() {
@@ -227,24 +237,20 @@ class AvisoInmobiliarioVenta extends AvisoInmobiliario {
     }
 
     public function setPrecioVenta($precioVenta) {
-        $this->precioVenta=$precioVenta;
+        $this->precioVenta =$precioVenta;
     }
 
     public function getCategoria() {
         return 'inmobiliario_venta';
     }
-    //  Polimorfismo en AvisoInmobiliarioVenta
+
     public function mostrarDetalle() {
-        $texto = "[INMOBILIARIO - VENTA] " . $this->obtenerDatosBasicos() . 
-                 " | Dirección: " . $this->getDireccion() . 
-                 " | Tipo: " . $this->getTipoPropiedad() . 
-                 " | Inmobiliaria: " . $this->getInmobiliaria() . 
-                 " | Precio Venta: $" . $this->precioVenta;
-        
-        if ($this->getResaltado() == 1) {
-            return "<strong><big>" . $texto . "</big></strong>";
-        }
-        return $texto;
+        $texto = "[INMOBILIARIO - VENTA] " . $this->obtenerDatosBasicos() .
+                 " | Dirección: " . $this->esc($this->getDireccion()) .
+                 " | Tipo: " . $this->esc($this->getTipoPropiedad()) .
+                 " | Inmobiliaria: " . $this->esc($this->getInmobiliaria()) .
+                 " | Precio Venta: $" . $this->esc($this->precioVenta);
+        return $this->envolverResaltado($texto);
     }
 }
 
@@ -252,10 +258,10 @@ class AvisoInmobiliarioAlquiler extends AvisoInmobiliario {
     private $precioAlquiler;
     private $gastosComunes;
 
-    public function __construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $direccion, $tipoPropiedad, $inmobiliaria, $precioAlquiler, $gastosComunes, $id, $fechaCreacion) {
-        parent::__construct($nombreAutor, $telefonoAutor, $resaltado, $usuarioPublicador, $direccion, $tipoPropiedad, $inmobiliaria, $id, $fechaCreacion);
-        $this->precioAlquiler = $precioAlquiler;
-        $this->gastosComunes = $gastosComunes;
+    public function __construct($titulo,$nombreAutor, $telefonoAutor,$resaltado, $usuarioPublicador,$direccion, $tipoPropiedad,$inmobiliaria, $precioAlquiler,$gastosComunes, $id,$fechaCreacion) {
+        parent::__construct($titulo,$nombreAutor, $telefonoAutor,$resaltado, $usuarioPublicador,$direccion, $tipoPropiedad,$inmobiliaria, $id,$fechaCreacion);
+        $this->precioAlquiler =$precioAlquiler;
+        $this->gastosComunes =$gastosComunes;
     }
 
     public function getPrecioAlquiler() {
@@ -263,7 +269,7 @@ class AvisoInmobiliarioAlquiler extends AvisoInmobiliario {
     }
 
     public function setPrecioAlquiler($precioAlquiler) {
-        $this->precioAlquiler=$precioAlquiler;
+        $this->precioAlquiler =$precioAlquiler;
     }
 
     public function getGastosComunes() {
@@ -271,25 +277,22 @@ class AvisoInmobiliarioAlquiler extends AvisoInmobiliario {
     }
 
     public function setGastosComunes($gastosComunes) {
-        $this->gastosComunes=$gastosComunes;
+        $this->gastosComunes =$gastosComunes;
     }
 
     public function getCategoria() {
         return 'inmobiliario_alquiler';
     }
-   // Polimorfismo en AvisoInmobiliarioAlquiler
+
     public function mostrarDetalle() {
-        $texto = "[INMOBILIARIO - ALQUILER] " . $this->obtenerDatosBasicos() . 
-                 " | Dirección: " . $this->getDireccion() . 
-                 " | Tipo: " . $this->getTipoPropiedad() . 
-                 " | Inmobiliaria: " . $this->getInmobiliaria() . 
-                 " | Alquiler Mensual: $" . $this->precioAlquiler . 
-                 " | Gastos Comunes: $" . $this->gastosComunes;
-        
-        if ($this->getResaltado() == 1) {
-            return "<strong><big>" . $texto . "</big></strong>";
-        }
-        return $texto;
+        $gcTexto = ($this->gastosComunes !== null && $this->gastosComunes !== '') ? "$" . $this->esc($this->gastosComunes) : "$0";
+        $texto = "[INMOBILIARIO - ALQUILER] " . $this->obtenerDatosBasicos() .
+                 " | Dirección: " . $this->esc($this->getDireccion()) .
+                 " | Tipo: " . $this->esc($this->getTipoPropiedad()) .
+                 " | Inmobiliaria: " . $this->esc($this->getInmobiliaria()) .
+                 " | Alquiler Mensual: $" . $this->esc($this->precioAlquiler) .
+                 " | Gastos Comunes: " . $gcTexto;
+        return $this->envolverResaltado($texto);
     }
 }
 ?>

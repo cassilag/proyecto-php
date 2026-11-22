@@ -1,13 +1,11 @@
 <?php
-include 'basedatos.php';
-$bd = new BaseDatos('visitante');
+include 'BaseDatos.php';
+$bd = new BaseDatos();
 $lista = $bd->obtenerTodosLosAvisos();
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Clasificados</title>
-<link rel="stylesheet" href="estilos.css">
-</head>
+<head><meta charset="UTF-8"><title>Clasificados</title><link rel="stylesheet" href="estilos.css"></head>
 <body>
     <h1>Avisos Clasificados</h1>
     <a href="clasificados.php">Ver</a> | <a href="publicador.php">Publicar</a> | <a href="admin.php">Admin</a>
@@ -15,7 +13,10 @@ $lista = $bd->obtenerTodosLosAvisos();
     <?php foreach ($lista as $a) { ?>
         <div>
             <?php echo $a->mostrarDetalle(); ?>
-            <p>Autor: <?php echo $a->getNombreAutor(); ?> - Tel: <?php echo $a->getTelefonoAutor(); ?></p>
+            <p>
+                Autor: <?php echo htmlspecialchars($a->getNombreAutor(), ENT_QUOTES, 'UTF-8'); ?> -
+                Tel: <?php echo htmlspecialchars($a->getTelefonoAutor(), ENT_QUOTES, 'UTF-8'); ?>
+            </p>
         </div>
         <hr>
     <?php } ?>
