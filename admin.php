@@ -18,7 +18,9 @@ $todos = $bd->obtenerTodosLosAvisos();
 ?>
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Admin</title></head>
+<head><meta charset="UTF-8"><title>Admin</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
 <body>
     <h1>Admin</h1>
     <a href="clasificados.php">Ver</a> | <a href="publicador.php">Publicar</a> | <a href="admin.php">Admin</a>
