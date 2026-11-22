@@ -31,7 +31,7 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     }
 
     public function setTitulo($titulo) {
-        $this->id=$titulo;
+        $this->titulo=$titulo;
    }                    
     public function getNombreAutor() {
         return $this->nombreAutor;
@@ -76,7 +76,7 @@ abstract class Aviso { // es abstracta porque el punto es que el aviso sea de un
     abstract public function getCategoria();// esto obliga a que las clases hijas tengan esto implementado porque tienen que devolver que a categoria pertenecen
     // agregado Método común y método abstracto para Polimorfismo
     public function obtenerDatosBasicos() {
-        return "ID: " . $this->id . " | Titulo: ".this->titulo. " | Fecha: " . $this->fechaCreacion . 
+        return "ID: " . $this->id . " | Titulo: ". $this->titulo. " | Fecha: " . $this->fechaCreacion . 
                " | Autor: " . $this->nombreAutor . " (Tel: " . $this->telefonoAutor . ")";
     }
 
