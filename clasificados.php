@@ -1,6 +1,6 @@
 <?php
 include 'basedatos.php';
-$bd = new BaseDatos();
+$bd = new BaseDatos('visitante');
 $lista = $bd->obtenerTodosLosAvisos();
 ?>
 <!DOCTYPE html>
